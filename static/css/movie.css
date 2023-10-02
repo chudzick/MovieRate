@@ -1,0 +1,24 @@
+.background-movie {
+    background-image: linear-gradient(to right, rgba(52.5, 31.5, 10.5, 1) calc((50vw - 170px) - 340px), rgba(52.5, 31.5, 10.5, 0.84) 50%, rgba(52.5, 31.5, 10.5, 0.84) 100%);
+    background-position: left calc((50vw - 170px) - 340px) top;
+    background-size: auto;
+    background-repeat: no-repeat;
+    height: 500px;
+    position: relative;
+    z-index: 1;
+}
+
+.background-cover {
+    background-image: linear-gradient(to right, #100f12 calc((50vw - 170px) - 340px), rgba(31.5, 31.5, 31.5, 0.84) 50%, rgba(31.5, 31.5, 31.5, 0.84) 100%);
+    height: 500px;
+    width: 100%;
+    box-shadow: 10px 5px 5px #b81e12;
+}
+
+.user-rating > svg {
+    color: gold;
+}
+
+.user-rating > svg > polygon {
+    fill: gold;
+}

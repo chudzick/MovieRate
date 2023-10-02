@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% comment %}Dodamy nasz własny filter do Template{% endcomment %}
+{% load movie_extras %}
+{% comment %}Dodamy filt do liczb tysięcznych UWAGA! wymaga dodania humanize w INSTALLED_APPS{% endcomment %}
+{% comment %}https://docs.djangoproject.com/en/dev/ref/contrib/humanize/#ref-contrib-humanize{% endcomment %}
+{% load humanize %}
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'css/movie.css' %}">
+{% endblock %}
+{% block page_title %}
+    Movie
+{% endblock %}
+{% block page_content %}
+    {% if movie %}
+        <div class="background-movie" style="background-image: url({{ movie.backdrop_image }})">
+            <div class="background-cover uk-flex uk-flex-middle">
+                <div class="uk-width-2-5 uk-margin-large-left" style="color: white!important;">
+                    <h2 class="uk-margin-remove-bottom" style="color: white">{{ movie.original_title }}
+                        ({{ movie.release_date|date:"Y" }})</h2>
+                    <span class="uk-margin-remove-top">{{ movie.release_date|date:"d.m.Y" }}</span>
+                    <div class="uk-margin-small-top uk-margin-small-bottom uk-flex uk-flex-middle">
+                        <span class="user-rating" uk-icon="icon: star; ratio: 1.5"></span>
+                        <div class="uk-grid-small uk-flex-middle" uk-grid>
+                            <div class="uk-width-auto">
+                                <span class="uk-text-large uk-margin-small-left uk-text-bold">{{ movie.statistics.vote_average }}</span>
+                            </div>
+                            <div class="uk-width-expand">
+                                <div class="uk-margin-remove-bottom uk-text-muted">
+                                    {{ movie.statistics.vote_count|intcomma }}
+                                </div>
+                                <p class="uk-text-meta uk-margin-remove-top">
+                                    Ocen społeczności
+                                </p>
+                            </div>
+                            <div class="uk-margin-small-left">
+                                <a uk-tooltip="Dodaj do kolekcji"
+                                   href="{% url 'add_movie_to_collection' movie_id=movie.id %}"
+                                   class="uk-icon-button" uk-icon="album"></a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <p class="uk-margin-small-bottom uk-text-bold" style="color: white">Opis</p>
+                    {{ movie.overview }}
+                    <p><span class="uk-text-bold"
+                             style="color: #b81e12">Występują:</span> {{ movie.cast|replace_pipe_with_comma }}</p>
+                    <p><span class="uk-text-bold" style="color: #b81e12">Reżyseria:</span> {{ movie.director }}</p>
+                    <p><span class="uk-text-bold"
+                             style="color: #b81e12">Gatunki:</span> {{ movie.genres|replace_pipe_with_comma }}</p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <h3>Film nie został znaleziony, proszę przejść do <a href="{% url 'all_movies' %}">listy filmów</a></h3>
+    {% endif %}
+
+    <div class="uk-margin-medium-left uk-margin-medium-right uk-margin-medium-top uk-margin-large-bottom">
+        <h1 style="color: white">Najnowsze Filmy</h1>
+        <div class="uk-flex uk-flex-between uk-margin-large-top" uk-flex>
+            {% for movie in latest_movie %}
+                <div class="uk-background-contain uk-background-muted uk-height-medium
+                 uk-panel uk-flex uk-flex-end uk-width-1-6 uk-flex-bottom"
+                     style="height: 425px; background-size: 300px 425px; {% if movie.tmdb_id %}background-image: url({{ movie.poster_url }}){% endif %}">
+                    <div class="uk-padding-small" style="color: white;">
+                        <span class="uk-margin-small-right" style="color: gold"
+                              uk-icon="icon: star"></span>{{ movie.statistics.vote_average|floatformat }}/10<br/>
+                        <a class="uk-text-bold"
+                           style="color: white!important;"
+                           href="{% url 'movie' id=movie.id %}">{{ movie.original_title|title }}</a><br/>
+                        <span class="uk-text-small">{{ movie.genres|truncatechars:20 }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

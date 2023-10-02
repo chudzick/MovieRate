@@ -1,0 +1,29 @@
+{% extends 'base_not_logged.html' %}
+{% block page_title %}
+    Login
+{% endblock %}
+{% block page_content %}
+    <h1>Zaloguj się</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="uk-margin">
+                <label class="uk-form-label">{{ field.label_tag }}</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input"
+                           name="{{ field.name }}"
+                           value="{{ field.value|default:'' }}"
+                           type="{{ field.field.widget.input_type }}">
+                </div>
+                <div class="uk-text-danger uk-margin-small-top">
+                    {{ field.errors }}
+                </div>
+            </div>
+        {% endfor %}
+        <button type="submit" class="uk-button uk-button-default uk-border-rounded uk-width-1-1 uk-margin-small-top"
+                style="background-color: red; color: white">
+            Zaloguj
+        </button>
+        Nie masz jeszcze konta? <a href="{% url 'register' %}">Zarejestruj się</a>
+    </form>
+{% endblock %}
