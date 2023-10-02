@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Movie Collection Bind
+{% endblock %}
+{% block page_content %}
+    <div class="uk-container uk-margin-large-top">
+        <div class="uk-flex" style="height: 425px">
+            <div style="width:300px; background-size: 300px 425px; {% if movie.tmdb_id %}background-image: url({{ movie.poster_url }}){% endif %}">
+            </div>
+            <div class="uk-width-expand">
+                <div class="uk-padding">
+                    <h2>Dodaj {{ movie.original_title }} do kolekcji:</h2>
+                    <table class="uk-table uk-table-divider">
+                        {% for collection in available_collections %}
+                            <tr>
+                                <td>{{ collection.name }}</td>
+                                <td>{{ collection.creation_date }}</td>
+                                <td>
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input hidden name="collection_id" id="collection_id"
+                                               value="{{ collection.id }}">
+                                        <button class="uk-button-default uk-button uk-border-rounded"
+                                                type="submit" style="background-color: red; color: white">
+                                            Dodaj
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

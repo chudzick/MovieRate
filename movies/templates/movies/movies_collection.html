@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    All Collections
+{% endblock %}
+
+{% block page_content %}
+    <div class="uk-container">
+        {% if additional_errors %}
+            <div class="uk-alert-danger" uk-alert>
+                <a class="uk-alert-close" uk-close></a>
+                {% for error in additional_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form class="uk-form-stacked" method="POST">
+            {% csrf_token %}
+            {% for field in collection_form %}
+                <div class="uk-margin">
+                    <label class="uk-form-label" style="color: white">{{ field.label_tag }}</label>
+                    <div class="uk-form-controls">
+                        {{ field }}
+                    </div>
+                    <div class="uk-text-danger uk-margin-small-top">
+                        {{ field.errors }}
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="submit" style="background-color: red; color: white"
+                    class="uk-button uk-button-default uk-border-rounded">Dodaj
+            </button>
+        </form>
+        <table class="uk-table uk-table-divider">
+            <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Właściciel</th>
+                <th>Data utworzenia</th>
+                <th>Data edycji</th>
+                <th>Liczba filmów</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for collection in collections %}
+                <tr>
+                    <td>{{ collection.name }}</td>
+                    <td>{{ collection.owner.username }}</td>
+                    <td>{{ collection.creation_date }}</td>
+                    <td>{{ collection.update_date }}</td>
+                    <td>{{ collection.movie_count }}</td>
+                    <td>
+                        <a href="{% url 'collection' id=collection.id %}"
+                           style="color: white; background: #b81e12"
+                           class="uk-icon-button uk-margin-small-right" uk-icon="search"></a>
+                        <a href="{% url 'remove_collection' collection_id=collection.id %}"
+                           style="color: white; background: #b81e12"
+                           class="uk-icon-button uk-margin-small-right" uk-icon="trash"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+
+

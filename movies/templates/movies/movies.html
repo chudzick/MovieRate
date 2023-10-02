@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    All Movies
+{% endblock %}
+{% block page_content %}
+    <div class="uk-margin-medium-left uk-margin-medium-right">
+        <div class="uk-flex uk-margin-medium-top" uk-flex>
+            <form class="uk-width-1-1">
+                <input style="background-color: inherit!important;"
+                       id="title" name="title"
+                       class="uk-input uk-border-rounded uk-width-2-5 uk-margin-small-right"
+                       placeholder="Wyszukaj po nazwie">
+                <button type="submit" style="background-color: red; color: white"
+                        class="uk-button uk-button-default uk-border-rounded">Szukaj
+                </button>
+            </form>
+        </div>
+
+        {% if filter_name %}
+            <div>
+                Wyniki wyszukiwania dla: {{ filter_name }}
+            </div>
+        {% endif %}
+
+
+        <div class="uk-flex uk-flex-between uk-margin-large-top" uk-flex>
+            {% for movie in movies_page.object_list %}
+                <div class="uk-background-contain uk-background-muted uk-height-medium
+                 uk-panel uk-flex uk-flex-end uk-width-1-6 uk-flex-bottom"
+                     style="height: 425px; background-size: 300px 425px; {% if movie.tmdb_id %}background-image: url({{ movie.poster_url }}){% endif %}">
+                    <div class="uk-padding-small" style="color: white;">
+                        <span class="uk-margin-small-right" style="color: gold"
+                              uk-icon="icon: star"></span>{{ movie.statistics.vote_average|floatformat }}/10<br/>
+                        <a class="uk-text-bold"
+                           style="color: white!important;"
+                           href="{% url 'movie' id=movie.id %}">{{ movie.original_title|title }}</a><br/>
+                        <span class="uk-text-small">{{ movie.genres|truncatechars:20 }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <ul class="uk-pagination">
+            {% if movies_page.has_previous %}
+                <li><a href="{% url 'all_movies' %}?page={{ movies_page.previous_page_number }}{% if filter_name %}&title={{ filter_name }}{% endif %}"><span
+                        class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+            {% endif %}
+            {% if movies_page.has_next %}
+                <li class="uk-margin-auto-left"><a
+                        href="{% url 'all_movies' %}?page={{ movies_page.next_page_number }}{% if filter_name %}&title={{ filter_name }}{% endif %}">Next
+                    <span class="uk-margin-small-left"
+                          uk-pagination-next></span></a></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
+
+

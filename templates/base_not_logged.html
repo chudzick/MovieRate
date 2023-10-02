@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block page_title %}Movies{% endblock %}</title>
+
+    {% block additional_css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/uikit.min.css' %}">
+
+    <script src="{% static 'js/uikit.min.js' %}"></script>
+    <script src="{% static 'js/uikit-icons.min.js' %}"></script>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            top: 0;
+            min-height: 100%;
+            background: #100f12;
+        }
+    </style>
+</head>
+<body>
+<div uk-height-viewport="offset-bottom: 0" class="uk-container">
+    <div class="uk-margin-large-top uk-flex uk-flex-middle uk-flex-center" style="height: 80vh">
+        <div class="uk-width-2-5 uk-card uk-card-default uk-border-rounded">
+            <div class="uk-card-body">
+                {% block  page_content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

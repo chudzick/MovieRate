@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Movie
+{% endblock %}
+{% block page_content %}
+    <div class="uk-container uk-margin-large-top">
+        {% if additional_errors %}
+            <div class="uk-alert-danger" uk-alert>
+                <a class="uk-alert-close" uk-close></a>
+                {% for error in additional_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form class="uk-form-stacked" method="POST">
+            {% csrf_token %}
+            {% for field in movie_form %}
+                <div class="uk-margin">
+                    <label class="uk-form-label" style="color: white" >{{ field.label_tag }}</label>
+                    <div class="uk-form-controls">
+                        {{ field }}
+                    </div>
+                    <div class="uk-text-danger uk-margin-small-top">
+                        {{ field.errors }}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="uk-margin uk-text-right">
+                <button type="submit" class="uk-button uk-button-default uk-border-rounded"
+                        style="background-color: red; color: white">
+                    Dodaj
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

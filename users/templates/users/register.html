@@ -1,0 +1,25 @@
+{% extends 'base_not_logged.html' %}
+{% block page_title %}
+    Register
+{% endblock %}
+{% block page_content %}
+    <h1>Rejestracja użytkownika</h1>
+    <form class="uk-form-stacked" method="POST">
+        {% csrf_token %}
+        {% for field in register_form %}
+            <div class="uk-margin">
+                <label class="uk-form-label">{{ field.label_tag }}</label>
+                <div class="uk-form-controls">
+                    {{ field }}
+                </div>
+                <div class="uk-text-danger uk-margin-small-top">
+                    {{ field.errors }}
+                </div>
+            </div>
+        {% endfor %}
+        <button type="submit" class="uk-button uk-button-default uk-border-rounded uk-width-1-1 uk-margin-small-top"
+                style="background-color: red; color: white">
+            Zarejestruj
+        </button>
+    </form>
+{% endblock %}

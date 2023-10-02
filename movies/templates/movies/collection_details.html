@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Collection
+{% endblock %}
+{% block page_content %}
+    {% if collection %}
+        <div class="uk-container">
+            <div class="uk-flex uk-flex-column uk-flex-between uk-margin-top">
+                <div>
+                    <h2>{{ collection.name }}</h2>
+                    <p>{{ collection.creation_date }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="uk-margin-medium-left uk-margin-medium-right">
+            <div class="uk-flex uk-flex-between uk-margin-large-top" uk-flex>
+                {% for movie in movies_page.object_list %}
+                    <div class="uk-flex uk-flex-column uk-width-1-6">
+                        <div class="uk-width-1-1 uk-background-contain uk-background-muted uk-height-medium uk-panel uk-flex uk-flex-end uk-flex-bottom"
+                             style="height: 425px; background-size: 300px 425px; {% if movie.tmdb_id %}background-image: url({{ movie.poster_url }}){% endif %}">
+                            <div class="uk-padding-small" style="color: white;">
+                                <span class="uk-margin-small-right" style="color: gold"
+                                      uk-icon="icon: star"></span>{{ movie.statistics.vote_average|floatformat }}/10<br/>
+                                <a class="uk-text-bold"
+                                   style="color: white!important;"
+                                   href="{% url 'movie' id=movie.id %}">{{ movie.original_title|title }}</a><br/>
+                                <span class="uk-text-small">{{ movie.genres|truncatechars:20 }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <a class="uk-width-1-1 uk-button uk-button-default"
+                               style="background-color: #b81e12; color: white"
+                               href="{% url 'remove_movie_from_collection' collection_id=collection.id movie_id=movie.id %}">Usuń</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <ul class="uk-pagination">
+                {% if movies_page.has_previous %}
+                    <li>
+                        <a href="{% url 'collection' id=collection.id %}?page={{ movies_page.previous_page_number }}"><span
+                                class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+                {% endif %}
+                {% if movies_page.has_next %}
+                    <li class="uk-margin-auto-left"><a
+                            href="{% url 'collection' id=collection.id %}?page={{ movies_page.next_page_number }}">Next
+                        <span class="uk-margin-small-left"
+                              uk-pagination-next></span></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% else %}
+        <h3>Kolekcja nie została znaleziona, proszę przejść do <a href="{% url 'all_collections' %}">listy kolekcji</a>
+        </h3>
+    {% endif %}
+
+{% endblock %}
